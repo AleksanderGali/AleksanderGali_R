@@ -30,7 +30,7 @@ remDr <- remoteDr(remoteServerAddr = "http://localhost",
                   newSession = TRUE)
 
 wektorLinkow<-c()
-for( i in 1:97){
+for( i in 1:50){
   newUrl<- paste0("https://www.otomoto.pl/osobowe/ford/mondeo/?search%5Border%5D=created_at%3Adesc&page=",i)
   remDr%>%go(newUrl)
   elems<- remDr %>% findElements(using="tag name", "h2")
@@ -57,7 +57,9 @@ for( w in 1:length(wektorLinkowU)){
   remDr%>%maximizeWindow
   remDr%>%go(wektorLinkowU[w])
   cena<-NA
-  cena<-remDr%>%findElement("class name", "offer-price__number")%>%getElementText()
+  cena<-remDr%>%findElement("class name", "price-wrapper")%>%getElementText()
+  cena<-str_split(cena, " P")
+  cena<-cena[[1]][1]
   szczegoly<-remDr%>%findElements("class name","offer-params__list" )
   
   listaSzczegolowOpis<-c()
@@ -83,7 +85,9 @@ zrobWiersz<-function(w,wektorLinkow,remDr){
   remDr%>%maximizeWindow
   remDr%>%go(wektorLinkowU[w])
   cena<-NA
-  cena<-remDr%>%findElement("class name", "offer-price__number")%>%getElementText()
+  cena<-remDr%>%findElement("class name", "price-wrapper")%>%getElementText()
+  cena<-str_split(cena, " P")
+  cena<-cena[[1]][1]
   szczegoly<-remDr%>%findElements("class name","offer-params__list" )
   listaSzczegolowOpis<-c()
   listaSzczegolowWartosci<-c()
@@ -134,8 +138,10 @@ remDr <- remoteDr(remoteServerAddr = "http://localhost",
 remDr %>% maximizeWindow
 remDr%>%go(wektorLinkowU[1])
 cena<-NA
-cena<-remDr%>%findElements("class name", "offer-price")%>%getElementText()
-print(cena)
+cena<-remDr%>%findElement("class name", "price-wrapper")%>%getElementText()
+cena<-str_split(cena, " P")
+cena<-cena[[1]][1]
+
 szczegoly<-remDr%>%findElements("class name", "offer-params__list" )
 
 
